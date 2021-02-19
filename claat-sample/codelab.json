@@ -1,0 +1,23 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2021-02-19T11:01:21Z",
+  "id": "claat-sample",
+  "duration": 34,
+  "title": "「Go mock stubライブラリ調査」",
+  "authors": "budougumi0617",
+  "summary": "claatでCodelabs形式の資料を作るとき大雑把な使い方です。",
+  "source": "1vn5RIsDIery24PkaGjL3l2BDmfif0iNiOXU-ZSXtG3k",
+  "theme": "go",
+  "status": [
+    "draft"
+  ],
+  "category": [
+    "Go"
+  ],
+  "tags": [],
+  "feedback": "https://github.com/budougumi0617/claat-sample/issues",
+  "url": "claat-sample"
+}
