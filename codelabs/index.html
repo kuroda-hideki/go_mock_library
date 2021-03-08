@@ -37,11 +37,11 @@
 <p>https://github.com/matryer/moq</p>
 <p>まずはお決まりのgo get</p>
 <pre><code>$ go get github.com/matryer/moq</code></pre>
+<p>mockの生成は、mockgenと同じく、</p>
 <p>moqコマンドを使い、作成したinterface名を羅列して使う模様。</p>
+<p>(mockgenは指定なくても勝手に出力してくれますね。</p>
 <pre><code>moq [flags] source-dir interface [interface2 [interface3 [...]]</code></pre>
-<p>mockgenは指定なくても勝手に出力してくれるのでそこの違いはある。</p>
-<p>今回は簡単にMethodにstringを渡すとintで返してくれるinterfaceを作成し、</p>
-<p>mockgenと比較しました。</p>
+<p>今回は簡単にMethodにstringを渡すとintで返してくれるinterfaceを作成しました。</p>
 <pre><code>package sample
 
 type Sample interface {
@@ -130,11 +130,11 @@ import (
 )
 
 func TestMoqSample(t *testing.T) {
-        mockedSample := &amp;SampleMock{
+    mockedSample := &amp;SampleMock{
                 MethodFunc: func(s string) int {
                     return 10
                 },
-        }
+    }
     t.Log(&#34;result:&#34;, mockedSample.Method(&#34;hoge&#34;))
 }</code></pre>
 <p>テストを走らせる。</p>
