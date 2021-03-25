@@ -237,30 +237,34 @@ PASS</code></pre>
 <p><a href="https://github.com/gostub/gostub" target="_blank">https://github.com/gostub/gostub</a></p>
 <h2 is-upgraded>構成</h2>
 <p>下記の様なディレクトリ構成でルーティングを構築することで、簡単にstubを作成できます</p>
-<p>.</p>
-<p>└── hello</p>
-<p>    └── world</p>
-<p>        ├── $GET.json</p>
-<p>        └── response.json</p>
+<pre><code>.
+└── hello
+    └── world
+        ├── $GET.json
+        └── response.json</code></pre>
 <p>$GET.json</p>
-<p>{</p>
-<p>  &#34;default&#34; : {</p>
-<p>    &#34;body&#34;: &#34;response.json&#34;,</p>
-<p>    &#34;status&#34;: 200</p>
-<p>  }</p>
-<p>}</p>
+<pre><code>{
+  &#34;default&#34; : {
+    &#34;body&#34;: &#34;response.json&#34;,
+    &#34;status&#34;: 200
+  }
+}</code></pre>
 <p>response.json</p>
-<p>{</p>
-<p>  &#34;hello&#34;: &#34;world!&#34;</p>
-<p>}</p>
+<pre><code>{
+  &#34;hello&#34;: &#34;world!&#34;
+}</code></pre>
 <h2 is-upgraded>実行例</h2>
-<p>$ gostub</p>
-<p>$ curl http://localhost:8181/hello/world</p>
-<p>{</p>
-<p>  &#34;hello&#34;: &#34;world!&#34;</p>
-<p>}</p>
-<p># shutdown</p>
-<p>$ curl http://localhost:8181/gostub/shutdown</p>
+<pre><code>$ gostub
+
+$ curl http://localhost:8181/hello/world
+
+{
+  &#34;hello&#34;: &#34;world!&#34;
+}
+
+
+# shutdown
+$ curl http://localhost:8181/gostub/shutdown</code></pre>
 <h2 is-upgraded>評価</h2>
 <p>外部APIや、未実装の自前APIなどを一時的にstubしておくには早くて便利。</p>
 <p>だがレスポンスを複数定義したりしようとすると複雑化するので、テスト利用も含めたmock/stub利用を考えている場合は候補には上げづらい。</p>
