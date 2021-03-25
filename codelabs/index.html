@@ -32,14 +32,98 @@
 
       </google-codelab-step>
     
-      <google-codelab-step label="moqを使ってみる" duration="0">
+      <google-codelab-step label="現状と課題" duration="0">
+        <h2 is-upgraded>そもそもmockとstubの言葉の定義</h2>
+<ul>
+<li>stub：未実装メソッドや外部APIなどの戻り値を返すだけのもの</li>
+<li>mock：プログラムの動作をシミュレートするオブジェクト</li>
+<li>現場では両方ひっくるめて&#34;mock&#34;という言葉が使われているイメージ</li>
+</ul>
+<h2 is-upgraded>gomockを使っている</h2>
+<p>既存プロダクトではgomockを使っているとのことだったのでどんな感じなのか触ってみた</p>
+<p>http://diita.drev.jp/@hiroi_junki/items/d83c9f82023a46dbbf417535880fa3c1</p>
+<h2 is-upgraded>Rubyほど簡単に書けない</h2>
+<p>マスターが下記のようにまとめてくれていますが、go向けの一般的なmockライブラリであるgomockだと</p>
+<ul>
+<li>そもそもmockを書く手順がrubyなどに比べて冗長で手間</li>
+<li>Rubyであれば、実装コードの中にmock用のコードも同居できるのに、gomockだと別途mockコードが出力されるので、比較的管理コストが上</li>
+<li>I/Fを定義して、さらにそれをテスト用のオブジェクトと差し替えれるようにコーディングしないとstubを実現できないので、手間が大きい</li>
+</ul>
+<h2 is-upgraded>目標</h2>
+<p> そこで、Rubyの様な感覚でmock/stubが書けるライブラリがないかを探してみた</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="調査対象" duration="0">
+        <p>下記のライブラリをそれぞれ触ってみて、今回の目的に合うかを確認しました</p>
+<table>
+<tr><td colspan="1" rowspan="1"><p>名前</p>
+</td><td colspan="1" rowspan="1"><p>URL</p>
+</td><td colspan="1" rowspan="1"><p>特徴</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>moq</p>
+</td><td colspan="1" rowspan="1"><p><a href="https://github.com/matryer/moq" target="_blank">https://github.com/matryer/moq</a></p>
+</td><td colspan="1" rowspan="1"><p>mockgenと同じくコマンドベースでinterfaceをmockにできる。</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>mock</p>
+</td><td colspan="1" rowspan="1"><p><a href="https://github.com/golang/mock" target="_blank">https://github.com/golang/mock</a></p>
+</td><td colspan="1" rowspan="1"><p>mockgenを使ってinterfaceのmockを生成(gomockと同じ)</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>stubcell</p>
+</td><td colspan="1" rowspan="1"><p><a href="https://github.com/yosuke-furukawa/stubcell" target="_blank">https://github.com/yosuke-furukawa/stubcell</a></p>
+</td><td colspan="1" rowspan="1"><p>クライアントがjson使うAPIのモックツールで、</p>
+<p>jsonを定義してあげることでstubとして使用することができる。</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>gostub</p>
+</td><td colspan="1" rowspan="1"><p><a href="https://github.com/golang/mock" target="_blank">https://github.com/gostub/gostub</a></p>
+</td><td colspan="1" rowspan="1"><p>外部APIや、未実装の自前APIなどを一時的にstubしておくには早くて便利。</p>
+<p>テスト用mockとしては利用目的には合致しなさそう</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>minimock</p>
+</td><td colspan="1" rowspan="1"><p><a href="https://github.com/gojuno/minimock" target="_blank">https://github.com/gojuno/minimock</a></p>
+</td><td colspan="1" rowspan="1"><p>gomockと同じ使い方ができ、generateしてmock用のinterfaceを作成する。</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>gomic</p>
+</td><td colspan="1" rowspan="1"><p><a href="https://github.com/suzuki-shunsuke/gomic" target="_blank">https://github.com/suzuki-shunsuke/gomic</a></p>
+</td><td colspan="1" rowspan="1"><p>こちらもgomockと同じ使い方ができ、generateしてmock用のinterfaceを作成する。</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>sqlmock</p>
+</td><td colspan="1" rowspan="1"><p><a href="https://github.com/yosuke-furukawa/stubcell" target="_blank">https://github.com/DATA-DOG/go-sqlmock</a></p>
+</td><td colspan="1" rowspan="1"><p>Go スタンダードライブラリである SQL ライブラリのモックを定義している。汎用的なものではない。</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>testify</p>
+</td><td colspan="1" rowspan="1"><p><a href="https://github.com/stretchr/testify" target="_blank">https://github.com/stretchr/testify</a></p>
+</td><td colspan="1" rowspan="1"><p>go でテスト用の関数の追加をするライブラリ。</p>
+<p>ほかの言語での Assert に相当する関数の提供がある。</p>
+<p>モックを作成する機能もある。</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p>Gomock</p>
+</td><td colspan="1" rowspan="1"><p><a href="https://github.com/TsuyoshiUshio/GoMock" target="_blank">https://github.com/TsuyoshiUshio/GoMock</a></p>
+</td><td colspan="1" rowspan="1"><p>ライブラリではない。</p>
+<p>Go言語でモックを作る例をまとめている。自分でモックを作っているので、モックのイメージをつかむのに有用そう。</p>
+</td></tr>
+</table>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="先に結論から" duration="0">
+        <ul>
+<li>Rubyの様な形で書けるライブラリは無かった</li>
+<li>Go言語ではI/F定義してテストライブラリを利用してmockコードを吐くのが一般的</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="moq" duration="0">
         <p><strong>moq</strong></p>
 <p>https://github.com/matryer/moq</p>
 <p>まずはお決まりのgo get</p>
 <pre><code>$ go get github.com/matryer/moq</code></pre>
 <p>mockの生成は、mockgenと同じく、</p>
 <p>moqコマンドを使い、作成したinterface名を羅列して使う模様。</p>
-<p>(mockgenは指定なくても勝手に出力してくれますね。</p>
 <pre><code>moq [flags] source-dir interface [interface2 [interface3 [...]]</code></pre>
 <p>今回は簡単にMethodにstringを渡すとintで返してくれるinterfaceを作成しました。</p>
 <pre><code>package sample
@@ -148,15 +232,56 @@ PASS</code></pre>
 
       </google-codelab-step>
     
-      <google-codelab-step label="吉富さん" duration="0">
-        <p>てすと</p>
-<p>編集てすとです</p>
+      <google-codelab-step label="gostub" duration="0">
+        <h2 is-upgraded>gostub</h2>
+<p><a href="https://github.com/gostub/gostub" target="_blank">https://github.com/gostub/gostub</a></p>
+<h2 is-upgraded>構成</h2>
+<p>下記の様なディレクトリ構成でルーティングを構築することで、簡単にstubを作成できます</p>
+<p>.</p>
+<p>└── hello</p>
+<p>    └── world</p>
+<p>        ├── $GET.json</p>
+<p>        └── response.json</p>
+<p>$GET.json</p>
+<p>{</p>
+<p>  &#34;default&#34; : {</p>
+<p>    &#34;body&#34;: &#34;response.json&#34;,</p>
+<p>    &#34;status&#34;: 200</p>
+<p>  }</p>
+<p>}</p>
+<p>response.json</p>
+<p>{</p>
+<p>  &#34;hello&#34;: &#34;world!&#34;</p>
+<p>}</p>
+<h2 is-upgraded>実行例</h2>
+<p>$ gostub</p>
+<p>$ curl http://localhost:8181/hello/world</p>
+<p>{</p>
+<p>  &#34;hello&#34;: &#34;world!&#34;</p>
+<p>}</p>
+<p># shutdown</p>
+<p>$ curl http://localhost:8181/gostub/shutdown</p>
+<h2 is-upgraded>評価</h2>
+<p>外部APIや、未実装の自前APIなどを一時的にstubしておくには早くて便利。</p>
+<p>だがレスポンスを複数定義したりしようとすると複雑化するので、テスト利用も含めたmock/stub利用を考えている場合は候補には上げづらい。</p>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="広井" duration="0">
-        <p>はじめに</p>
+      <google-codelab-step label="この資料の編集環境&lt;codelabs&gt;について" duration="0">
+        <p>Google Docに書くだけでGoogle Codelabsと同じようなことが作成できる。</p>
+<p>やり方としては、以下からClaatをダウンロードする</p>
+<p><strong>Codelabs command line tool</strong></p>
+<p><a href="https://budougumi0617.github.io/2019/03/27/create-codelab-page-by-claat/" target="_blank">https://budougumi0617.github.io/2019/03/27/create-codelab-page-by-claat/</a></p>
+<p>claat export [Google DocのID]を実行する</p>
+<p>$ claat export 1j7T_dTvFRiGM6Uw7I79kBNfjfC_CZMIcgxqsoZmZFFk                                           </p>
+<p>ok</p>
+<p>$ tree               </p>
+<p>/path</p>
+<p>|--codelab.json</p>
+<p>|--img</p>
+<p>|--index.html</p>
+<p>これをGitHub Pagesに配置するだけでCodelabを公開できる</p>
 
 
       </google-codelab-step>
